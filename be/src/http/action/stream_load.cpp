@@ -602,6 +602,7 @@ Status StreamLoadAction::_process_put(HttpRequest* http_req, StreamLoadContext* 
         }
     }
     int32_t rpc_timeout_ms = config::txn_commit_rpc_timeout_ms;
+    // 如果设置超时时间, 先min(timeout/2)再max(timeout/4)
     if (ctx->timeout_second != -1) {
         request.__set_timeout(ctx->timeout_second);
         rpc_timeout_ms = std::min(ctx->timeout_second * 1000 / 2, rpc_timeout_ms);

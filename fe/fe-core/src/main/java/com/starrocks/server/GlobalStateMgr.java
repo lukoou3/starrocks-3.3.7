@@ -1804,6 +1804,7 @@ public class GlobalStateMgr {
     }
 
     public void createReplayer() {
+        // edit log replay线程
         replayer = new Daemon("replayer", REPLAY_INTERVAL_MS) {
             private JournalCursor cursor = null;
             // avoid numerous 'meta out of date' log
@@ -1843,6 +1844,11 @@ public class GlobalStateMgr {
                     err = true;
                 }
 
+                /**
+                 * 设置canRead状态，两个参数：hasLog, err
+                 *  只要出现异常，则设置canRead为false，isReady为false
+                 *  没有出现异常，才会根据meta_delay_toleration_second参数判断延时超时
+                 */
                 setCanRead(hasLog, err);
             }
 

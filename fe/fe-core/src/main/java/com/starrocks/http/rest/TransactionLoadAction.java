@@ -326,7 +326,7 @@ public class TransactionLoadAction extends RestBaseAction {
         Long timeoutMillis = Optional.ofNullable(request.getRequest().headers().get(TIMEOUT_KEY))
                 .map(Long::parseLong)
                 .map(sec -> sec * 1000L)
-                .orElse(DEFAULT_TXN_TIMEOUT_MILLIS);
+                .orElse(DEFAULT_TXN_TIMEOUT_MILLIS); // timeoutMillis
         LoadJobSourceType sourceType = parseSourceType(request.getSingleParameter(SOURCE_TYPE));
 
         Integer channelId = Optional

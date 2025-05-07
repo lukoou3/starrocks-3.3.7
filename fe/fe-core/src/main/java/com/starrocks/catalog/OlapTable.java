@@ -1289,6 +1289,7 @@ public class OlapTable extends Table {
     }
 
     /*
+     * 根据分区和集群状态推断分布信息
      * Infer the distribution info based on partitions and cluster status
      */
     public void inferDistribution(DistributionInfo info) throws DdlException {
@@ -1299,9 +1300,11 @@ public class OlapTable extends Table {
                         5, Config.enable_auto_tablet_distribution);
                 info.setBucketNum(numBucket);
             } else if (info.getType() == DistributionInfo.DistributionInfoType.RANDOM) {
+                // 优先使用用户设置的可变分桶数, mutable_bucket_num
                 // prior to use user set mutable bucket num
                 long numBucket = getMutableBucketNum();
                 if (numBucket <= 0) {
+                    // 计算默认RANDOM分桶数
                     numBucket = CatalogUtils.calPhysicalPartitionBucketNum();
                 }
                 info.setBucketNum((int) numBucket);
